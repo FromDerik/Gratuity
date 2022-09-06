@@ -1,39 +1,58 @@
 //
 //  SettingsView.swift
-//  SettingsView
+//  Gratuity
 //
 //  Created by Derik Malcolm on 9/1/2022.
 //  Copyright © 2022 Derik Malcolm. All rights reserved.
 //
 
 import SwiftUI
-
-extension Color {
-    public static var allColors: [Color] {
-        [
-            
-        ]
-    }
-}
+import WidgetKit
 
 struct SettingsView: View {
-    @State private var tintColor = Color.blue
+    @ObservedObject var viewModel = ViewModel()
     
+    var allColors: [Color] {
+        [
+            .red,
+            .orange,
+            .yellow,
+            .green,
+            .teal,
+            .blue,
+            .purple,
+            .pink
+        ]
+    }
     var body: some View {
         NavigationView {
             Form {
                 Section {
-                    Picker("Tint Color", selection: $tintColor) {
-                        ForEach(Color.allColors, id: \.self) { color in
-                            HStack(spacing: 10) {
-                                color
-                                    .frame(width: 30, height: 30)
-                                    .clipShape(RoundedRectangle(cornerRadius: 5))
-                                Text(color.description)
+                    HStack {
+                        ForEach(allColors, id: \.self) { color in
+                            Group {
+                                if color == viewModel.appTint {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .font(.title.bold())
+                                        .foregroundColor(color)
+                                } else {
+                                    Circle()
+                                        .foregroundColor(color)
+                                }
+                            }
+                            .onTapGesture {
+                                self.viewModel.appTint = color
+                                WidgetCenter.shared.reloadAllTimelines()
                             }
                         }
-//                        .navigationBarTitle("Tint Color")
+                        
+                        ColorPicker(selection: $viewModel.appTint) {
+                            Text("")
+                        }
                     }
+                    
+                } header: {
+                    Text("App Tint")
                 }
             }
             .navigationBarTitle("Settings")
@@ -41,10 +60,17 @@ struct SettingsView: View {
     }
 }
 
+extension SettingsView {
+    class ViewModel: ObservableObject {
+        @AppStorage("appTint", store: .init(suiteName: "group.com.fromderik.Gratuity")) var appTint: Color = .blue
+    }
+}
 struct SettingsView_Previews: PreviewProvider {
+    @State static var presented = true
+    
     static var previews: some View {
-        Button("Modal always shown") {}
-            .sheet(isPresented: .constant(true)) {
+        Button("Modal always shown") { presented.toggle() }
+            .sheet(isPresented: $presented) {
                 SettingsView()
             }
     }

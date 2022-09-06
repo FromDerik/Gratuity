@@ -13,7 +13,7 @@ import GratuityShared
 
 struct AddTipView: View {
     @Environment(\.dismiss) var dismiss
-    
+    @FocusState private var isAmountFocused: Bool
     @ObservedObject var viewModel: ViewModel
     
     init(date: Binding<Date>) {
@@ -28,24 +28,29 @@ struct AddTipView: View {
         })
         
         return NavigationView {
-            ZStack(alignment: .bottom) {
-                Form {
-                    Section {
-                        TextField("Amount", text: binding)
-                            .keyboardType(.numberPad)
-                    } header: {
-                        Text("Amount")
-                    }
-                    
-                    Section {
-                        TextField("Comment", text: $viewModel.comment)
-                    } header: {
-                        Text("Comment")
-                    }
-                    
+            Form {
+                Section {
+                    TextField("Amount", text: binding)
+                        .keyboardType(.numberPad)
+                        .focused($isAmountFocused)
+                        .scrollDismissesKeyboard(.immediately)
+                        .onSubmit {
+                            isAmountFocused.toggle()
+                        }
+                } header: {
+                    Text("Amount")
                 }
-                .navigationTitle("Add Tip")
                 
+                Section {
+                    TextField("Comment", text: $viewModel.comment)
+                } header: {
+                    Text("Comment")
+                }
+                
+            }
+            .navigationTitle("Add Tip")
+            .navigationBarTitleDisplayMode(.inline)
+            .safeAreaInset(edge: .bottom) {
                 Button(action: save) {
                     Group {
                         HStack {
@@ -56,14 +61,15 @@ struct AddTipView: View {
                         }
                     }
                     .background(RoundedRectangle(cornerRadius: 25)
-                        .fill(Color("AppTint")
-                            .gradient
-                        )
+                        .fill(viewModel.appTint)
                     )
                     .foregroundColor(Color(uiColor: .systemBackground))
                     .padding()
                 }
             }
+        }
+        .onAppear {
+            isAmountFocused = true
         }
     }
     
@@ -84,6 +90,7 @@ struct AddTipView: View {
 
 extension AddTipView {
     class ViewModel: ObservableObject {
+        @AppStorage("appTint", store: .init(suiteName: "group.com.fromderik.Gratuity")) var appTint: Color = .blue
         @Published var amount = "0".currencyInputFormatting()
         @Published var comment = ""
         var date: Date

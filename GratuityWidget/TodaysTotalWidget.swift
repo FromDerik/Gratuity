@@ -1,6 +1,6 @@
 //
 //  GratuityWidget.swift
-//  GratuityWidget
+//  GratuityWidgetExtension
 //
 //  Created by Derik Malcolm on 9/1/2022.
 //  Copyright © 2022 Derik Malcolm. All rights reserved.
@@ -48,6 +48,8 @@ struct TodayTotalEntry: TimelineEntry {
 
 struct TodaysTotalEntryView : View {
     @Environment(\.widgetFamily) var widgetFamily
+    @AppStorage("appTint", store: .init(suiteName: "group.com.fromderik.Gratuity")) var appTint: Color = .blue
+    
     var entry: TodayTotalEntry
     var arraySlice : ArraySlice<Tip> {
         entry.tips.suffix(5)
@@ -60,7 +62,7 @@ struct TodaysTotalEntryView : View {
     var body: some View {
         ZStack {
             ContainerRelativeShape()
-                .fill(Color("AppTint").gradient)
+                .fill(appTint.gradient)
             
             switch widgetFamily {
             case .systemSmall:

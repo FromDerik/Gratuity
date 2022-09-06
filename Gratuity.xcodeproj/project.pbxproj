@@ -13,6 +13,7 @@
 		6318D46728C54666003E224B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6318D46628C54666003E224B /* Preview Assets.xcassets */; };
 		632D747626AC4CE900782469 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632D747526AC4CE900782469 /* MainView.swift */; };
 		6377617D26B6523C00B7F2D3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6377617C26B6523C00B7F2D3 /* SettingsView.swift */; };
+		6382AD4B28C6B71000BA6044 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637A65A128C6A6AC00A49D4A /* Preferences.swift */; };
 		6383A6F428BF089B005C6F6A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B46DAF26A3DC5E00F6A576 /* WidgetKit.framework */; };
 		6383A6F528BF089B005C6F6A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1A12E422FF46B4002E575C /* SwiftUI.framework */; };
 		6383A6F828BF089B005C6F6A /* TodaysTotalWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383A6F728BF089B005C6F6A /* TodaysTotalWidget.swift */; };
@@ -103,6 +104,7 @@
 		635172F321AFB58F0074C07B /* IntentsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IntentsUI.framework; path = System/Library/Frameworks/IntentsUI.framework; sourceTree = SDKROOT; };
 		635F75A626A760EF00D735DF /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
 		6377617C26B6523C00B7F2D3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		637A65A128C6A6AC00A49D4A /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		637E950627811DAA00FEA7C9 /* Tipped 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Tipped 3.xcdatamodel"; sourceTree = "<group>"; };
 		6383A6F328BF089A005C6F6A /* GratuityWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GratuityWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6383A6F728BF089B005C6F6A /* TodaysTotalWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodaysTotalWidget.swift; sourceTree = "<group>"; };
@@ -218,6 +220,7 @@
 				639F6561286971D200E02850 /* AddTipView.swift */,
 				63E85D92286A5BAD000E7365 /* EditTipView.swift */,
 				6377617C26B6523C00B7F2D3 /* SettingsView.swift */,
+				637A65A128C6A6AC00A49D4A /* Preferences.swift */,
 				63F89247219E8FC70035EDAE /* Assets.xcassets */,
 				6318D46528C54666003E224B /* Preview Content */,
 				63F8924C219E8FC70035EDAE /* Info.plist */,
@@ -448,6 +451,7 @@
 			files = (
 				632D747626AC4CE900782469 /* MainView.swift in Sources */,
 				6377617D26B6523C00B7F2D3 /* SettingsView.swift in Sources */,
+				6382AD4B28C6B71000BA6044 /* Preferences.swift in Sources */,
 				63E85D93286A5BAD000E7365 /* EditTipView.swift in Sources */,
 				639F6562286971D200E02850 /* AddTipView.swift in Sources */,
 				63F89241219E8FC40035EDAE /* GratuityApp.swift in Sources */,

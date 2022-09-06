@@ -1,6 +1,6 @@
 //
 //  MainView.swift
-//  MainView
+//  Gratuity
 //
 //  Created by Derik Malcolm on 9/1/2022.
 //  Copyright © 2022 Derik Malcolm. All rights reserved.
@@ -11,7 +11,7 @@ import Charts
 import GratuityShared
 
 struct CustomButtonStyle: ButtonStyle {
-    @AppStorage("appTint") var appTint: Color = .accentColor
+    @AppStorage("appTint", store: .init(suiteName: "group.com.fromderik.Gratuity")) var appTint: Color = .blue
     var pressed: Bool
     
     func makeBody(configuration: Configuration) -> some View {
@@ -104,6 +104,16 @@ struct MainView: View {
                 }
                 .padding(.horizontal)
                 .navigationTitle(NumberFormatter.currencyString(from: viewModel.total) ?? "Home")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            viewModel.showingSettingsView.toggle()
+                        } label: {
+                            Image(systemName: "gearshape.fill")
+                        }
+
+                    }
+                }
             }
         }
         .sheet(isPresented: $viewModel.showingAddTipView, onDismiss: {
@@ -112,6 +122,10 @@ struct MainView: View {
             AddTipView(date: $viewModel.selectedDate)
                 .presentationDetents([.medium])
         })
+        .sheet(isPresented: $viewModel.showingSettingsView) {
+            SettingsView()
+                .presentationDetents([.large, .medium])
+        }
         .tint(viewModel.appTint)
     }
     
@@ -230,9 +244,10 @@ extension MainView {
         
         @Published var showingDatePicker = false
         @Published var showingAddTipView = false
+        @Published var showingSettingsView = false
         
         @AppStorage("showingChart") var showingChart = true
-        @AppStorage("appTint") var appTint: Color = .accentColor
+        @AppStorage("appTint", store: .init(suiteName: "group.com.fromderik.Gratuity")) var appTint: Color = .blue
         
 #if targetEnvironment(simulator)
         let dataManager = DataManager.preview
