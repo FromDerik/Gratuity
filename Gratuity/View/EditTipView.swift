@@ -1,5 +1,5 @@
 //
-//  AddTipView.swift
+//  EditTipView.swift
 //  Gratuity
 //
 //  Created by Derik Malcolm on 9/1/2022.
@@ -11,13 +11,15 @@
 import SwiftUI
 import GratuityShared
 
-struct AddTipView: View {
+struct EditTipView: View {
     @Environment(\.dismiss) var dismiss
     @FocusState private var isAmountFocused: Bool
-    @ObservedObject var viewModel: ViewModel
     
-    init(date: Binding<Date>) {
-        self.viewModel = ViewModel(date: date)
+    @ObservedObject var viewModel: ViewModel
+    @EnvironmentObject var dataManager: DataManager
+    
+    init(tip: Tip) {
+        self.viewModel = ViewModel(tip: tip)
     }
     
     var body: some View {
@@ -74,35 +76,31 @@ struct AddTipView: View {
     }
     
     func save() {
-        guard let amount = NumberFormatter.double(from: viewModel.amount) else { return }
+        guard let amount = NumberFormatter.double(from: viewModel.amount), amount != 0.00 else { return }
         
-#if targetEnvironment(simulator)
-        let dataManager = DataManager.preview
-#else
-        let dataManager = DataManager.main
-#endif
+        viewModel.tip.amount = amount
+        viewModel.tip.comment = viewModel.comment
         
-        dataManager.addTip(amount: amount, comment: viewModel.comment, date: viewModel.date) { _ in
-            self.dismiss()
-        }
+        dismiss()
     }
 }
 
-extension AddTipView {
+extension EditTipView {
     class ViewModel: ObservableObject {
         @AppStorage("appTint", store: .init(suiteName: "group.com.fromderik.Gratuity")) var appTint: Color = .blue
-        @Published var amount = "0".currencyInputFormatting()
+        @Published var amount : String
         @Published var comment = ""
-        var date: Date
+        @Published var tip: Tip
         
-        init(date: Binding<Date>) {
-            self.date = date.wrappedValue
+        init(tip: Tip) {
+            self.tip = tip
+            self.amount = NumberFormatter.currencyString(from: tip.amount) ?? "0".currencyInputFormatting()
         }
     }
 }
 
-struct AddTipView_Previews: PreviewProvider {
+struct EditTipView_Previews: PreviewProvider {
     static var previews: some View {
-        AddTipView(date: .constant(Date()))
+        EditTipView(tip: Tip(context: DataManager.main.context))
     }
 }

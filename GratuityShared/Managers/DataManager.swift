@@ -27,15 +27,22 @@ public class DataManager: ObservableObject {
     public static var preview: DataManager = {
         let result = DataManager(inMemory: true)
         let viewContext = result.persistentContainer.viewContext
-        for i in 0..<24 {
-            let dateComponents = Calendar.current.dateComponents([.year, .month, .day], from: .now)
-            
-            let tip = Tip(context: viewContext)
-            tip.amount = Double.random(in: 5...15)
-            tip.comment = ""
-            tip.date = Calendar.current.date(from: dateComponents)
-            tip.createdAt = Calendar.current.date(bySetting: .hour, value: i, of: .now)
+        
+        for date in Calendar.current.month(for: .now) {
+            for i in 0..<24 {
+                var dateComponents = Calendar.current.dateComponents([.year, .month, .day], from: date)
+                
+                let tip = Tip(context: viewContext)
+                tip.amount = Double.random(in: 5...25)
+                tip.comment = ""
+                tip.date = Calendar.current.date(from: dateComponents)
+                
+                dateComponents.hour = i
+                tip.createdAt = Calendar.current.date(from: dateComponents)
+            }
         }
+        
+        
         do {
             try viewContext.save()
         } catch {
@@ -112,6 +119,32 @@ public class DataManager: ObservableObject {
     }
     
     //MARK: - Core Data Fetching
+    
+    public func fetchTips(filter: String, completionHandler: @escaping ([Tip]) -> Void) throws {
+        let request: NSFetchRequest<Tip> = Tip.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true), NSSortDescriptor(key: "createdAt", ascending: true)]
+        
+        var predicateArray = [NSPredicate]()
+        
+        let numberFormatter = NumberFormatter()
+        numberFormatter.minimumFractionDigits = 2
+        numberFormatter.maximumFractionDigits = 2
+        
+        if let amount = numberFormatter.number(from: filter)?.doubleValue  {
+            predicateArray.append(NSPredicate(format: "amount == %f", amount as CVarArg))
+        }
+        
+        predicateArray.append(NSPredicate(format: "comment CONTAINS[cd] %@", filter))
+        
+        request.predicate = NSCompoundPredicate(orPredicateWithSubpredicates: predicateArray)
+        
+        do {
+            let tips = try context.fetch(request)
+            completionHandler(tips)
+        } catch {
+            throw error
+        }
+    }
     
     public func fetchTips(dates: [Date] = [Date](), completionHandler: @escaping ([Tip]) -> Void) throws {
         let request: NSFetchRequest<Tip> = Tip.fetchRequest()

@@ -12,18 +12,17 @@ import WidgetKit
 struct SettingsView: View {
     @ObservedObject var viewModel = ViewModel()
     
-    var allColors: [Color] {
-        [
-            .red,
-            .orange,
-            .yellow,
-            .green,
-            .teal,
-            .blue,
-            .purple,
-            .pink
-        ]
-    }
+    let allColors: [Color] = [
+        .red,
+        .orange,
+        .yellow,
+        .green,
+        .teal,
+        .blue,
+        .purple,
+        .pink
+    ]
+    
     var body: some View {
         NavigationView {
             Form {
@@ -33,13 +32,13 @@ struct SettingsView: View {
                             Group {
                                 if color == viewModel.appTint {
                                     Image(systemName: "checkmark.circle.fill")
-                                        .font(.title.bold())
-                                        .foregroundColor(color)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
                                 } else {
                                     Circle()
-                                        .foregroundColor(color)
                                 }
                             }
+                            .foregroundColor(color)
                             .onTapGesture {
                                 self.viewModel.appTint = color
                                 WidgetCenter.shared.reloadAllTimelines()
@@ -72,6 +71,8 @@ struct SettingsView_Previews: PreviewProvider {
         Button("Modal always shown") { presented.toggle() }
             .sheet(isPresented: $presented) {
                 SettingsView()
+                    
             }
+            .previewDevice(.init(rawValue: "iPhone 14 Pro"))
     }
 }

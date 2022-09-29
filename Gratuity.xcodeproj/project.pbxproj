@@ -8,12 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		2F48155E22C06032009315CE /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F48155D22C06032009315CE /* CloudKit.framework */; };
+		6309A7B028CC29D000B4A315 /* PickerValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6309A7AF28CC29D000B4A315 /* PickerValues.swift */; };
+		6309A7B228CD0D2B00B4A315 /* CustomButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6309A7B128CD0D2B00B4A315 /* CustomButtonStyle.swift */; };
 		6318D46028C51CFD003E224B /* GratuityShared.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 63D21A6426A8638A00CA9851 /* GratuityShared.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6318D46428C52388003E224B /* GratuityShared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63D21A6426A8638A00CA9851 /* GratuityShared.framework */; };
 		6318D46728C54666003E224B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6318D46628C54666003E224B /* Preview Assets.xcassets */; };
 		632D747626AC4CE900782469 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632D747526AC4CE900782469 /* MainView.swift */; };
 		6377617D26B6523C00B7F2D3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6377617C26B6523C00B7F2D3 /* SettingsView.swift */; };
-		6382AD4B28C6B71000BA6044 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637A65A128C6A6AC00A49D4A /* Preferences.swift */; };
+		637E795528CC27CF009D6671 /* ChartData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637E795428CC27CF009D6671 /* ChartData.swift */; };
 		6383A6F428BF089B005C6F6A /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B46DAF26A3DC5E00F6A576 /* WidgetKit.framework */; };
 		6383A6F528BF089B005C6F6A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1A12E422FF46B4002E575C /* SwiftUI.framework */; };
 		6383A6F828BF089B005C6F6A /* TodaysTotalWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6383A6F728BF089B005C6F6A /* TodaysTotalWidget.swift */; };
@@ -91,6 +93,16 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		63DB9F8B28C9B6A10006C107 /* Embed ExtensionKit Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(EXTENSIONS_FOLDER_PATH)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Embed ExtensionKit Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -98,13 +110,15 @@
 		2F2E27FF22DDA68D00EBB1DD /* Tipped 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Tipped 2.xcdatamodel"; sourceTree = "<group>"; };
 		2F48155D22C06032009315CE /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		2FB2FB9E22C550E200AD1705 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS6.0.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
+		6309A7AF28CC29D000B4A315 /* PickerValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerValues.swift; sourceTree = "<group>"; };
+		6309A7B128CD0D2B00B4A315 /* CustomButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonStyle.swift; sourceTree = "<group>"; };
 		6318D46628C54666003E224B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		632D747526AC4CE900782469 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		635172E421AECBAA0074C07B /* Gratuity.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Gratuity.entitlements; sourceTree = "<group>"; };
 		635172F321AFB58F0074C07B /* IntentsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IntentsUI.framework; path = System/Library/Frameworks/IntentsUI.framework; sourceTree = SDKROOT; };
 		635F75A626A760EF00D735DF /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
 		6377617C26B6523C00B7F2D3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		637A65A128C6A6AC00A49D4A /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		637E795428CC27CF009D6671 /* ChartData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartData.swift; sourceTree = "<group>"; };
 		637E950627811DAA00FEA7C9 /* Tipped 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Tipped 3.xcdatamodel"; sourceTree = "<group>"; };
 		6383A6F328BF089A005C6F6A /* GratuityWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GratuityWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6383A6F728BF089B005C6F6A /* TodaysTotalWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodaysTotalWidget.swift; sourceTree = "<group>"; };
@@ -166,6 +180,27 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		637E795228CC278A009D6671 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				637E795428CC27CF009D6671 /* ChartData.swift */,
+				6309A7AF28CC29D000B4A315 /* PickerValues.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		637E795328CC2791009D6671 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				632D747526AC4CE900782469 /* MainView.swift */,
+				639F6561286971D200E02850 /* AddTipView.swift */,
+				63E85D92286A5BAD000E7365 /* EditTipView.swift */,
+				6377617C26B6523C00B7F2D3 /* SettingsView.swift */,
+				6309A7B128CD0D2B00B4A315 /* CustomButtonStyle.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		6383A6F628BF089B005C6F6A /* GratuityWidget */ = {
 			isa = PBXGroup;
 			children = (
@@ -180,7 +215,6 @@
 		63D21A6526A8638B00CA9851 /* GratuityShared */ = {
 			isa = PBXGroup;
 			children = (
-				63F89283219E92F00035EDAE /* Tipped.xcdatamodeld */,
 				63FF373721C5EB7500C08B07 /* Managers */,
 				63FF373621C5EB6C00C08B07 /* Models */,
 				63FF373C21C5EBBC00C08B07 /* Helpers */,
@@ -216,11 +250,8 @@
 			isa = PBXGroup;
 			children = (
 				63F89240219E8FC40035EDAE /* GratuityApp.swift */,
-				632D747526AC4CE900782469 /* MainView.swift */,
-				639F6561286971D200E02850 /* AddTipView.swift */,
-				63E85D92286A5BAD000E7365 /* EditTipView.swift */,
-				6377617C26B6523C00B7F2D3 /* SettingsView.swift */,
-				637A65A128C6A6AC00A49D4A /* Preferences.swift */,
+				637E795228CC278A009D6671 /* Model */,
+				637E795328CC2791009D6671 /* View */,
 				63F89247219E8FC70035EDAE /* Assets.xcassets */,
 				6318D46528C54666003E224B /* Preview Content */,
 				63F8924C219E8FC70035EDAE /* Info.plist */,
@@ -232,6 +263,7 @@
 		63FF373621C5EB6C00C08B07 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				63F89283219E92F00035EDAE /* Tipped.xcdatamodeld */,
 				63F89282219E92F00035EDAE /* Day.swift */,
 			);
 			path = Models;
@@ -326,6 +358,7 @@
 				63F8923B219E8FC40035EDAE /* Resources */,
 				63B46DBB26A3DC6100F6A576 /* Embed App Extensions */,
 				63D21A5A26A860D300CA9851 /* Embed Frameworks */,
+				63DB9F8B28C9B6A10006C107 /* Embed ExtensionKit Extensions */,
 			);
 			buildRules = (
 			);
@@ -451,9 +484,11 @@
 			files = (
 				632D747626AC4CE900782469 /* MainView.swift in Sources */,
 				6377617D26B6523C00B7F2D3 /* SettingsView.swift in Sources */,
-				6382AD4B28C6B71000BA6044 /* Preferences.swift in Sources */,
+				6309A7B228CD0D2B00B4A315 /* CustomButtonStyle.swift in Sources */,
 				63E85D93286A5BAD000E7365 /* EditTipView.swift in Sources */,
+				6309A7B028CC29D000B4A315 /* PickerValues.swift in Sources */,
 				639F6562286971D200E02850 /* AddTipView.swift in Sources */,
+				637E795528CC27CF009D6671 /* ChartData.swift in Sources */,
 				63F89241219E8FC40035EDAE /* GratuityApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -502,7 +537,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.fromderik.Tipped.GratuityWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fromderik.Gratuity.GratuityWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -534,7 +569,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.fromderik.Tipped.GratuityWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fromderik.Gratuity.GratuityWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -562,7 +597,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.derikmalcolm.GratuityShared;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fromderik.GratuityShared;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
@@ -592,7 +627,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.derikmalcolm.GratuityShared;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fromderik.GratuityShared;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
@@ -735,12 +770,13 @@
 				DEVELOPMENT_TEAM = 6DK3V5LFZU;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Gratuity/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Gratuity;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.fromderik.Tipped;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fromderik.Gratuity;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -767,12 +803,13 @@
 				DEVELOPMENT_TEAM = 6DK3V5LFZU;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Gratuity/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Gratuity;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.fromderik.Tipped;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fromderik.Gratuity;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

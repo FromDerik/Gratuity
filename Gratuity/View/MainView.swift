@@ -10,118 +10,82 @@ import SwiftUI
 import Charts
 import GratuityShared
 
-struct CustomButtonStyle: ButtonStyle {
-    @AppStorage("appTint", store: .init(suiteName: "group.com.fromderik.Gratuity")) var appTint: Color = .blue
-    var pressed: Bool
-    
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .foregroundColor(appTint)
-            .padding(5)
-            .background(
-                Group {
-                    if pressed {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundColor(Color(UIColor.secondarySystemFill))
-                    }
-                }
-            )
-    }
-}
-
 struct MainView: View {
     @ObservedObject var viewModel = ViewModel()
-    @State var proxy: ScrollViewProxy?
     
     var body: some View {
         NavigationStack {
-            ZStack(alignment: .bottomTrailing) {
-                VStack(spacing: 16) {
-                    Picker("", selection: $viewModel.pickerSelection) {
-                        ForEach(PickerValue.allCases, id: \.self) { value in
-                            Text(value.rawValue)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    .onChange(of: viewModel.pickerSelection) { _ in viewModel.fetchData() }
-                    
-                    datePicker
-                        .onChange(of: viewModel.selectedDate) { _ in viewModel.fetchData() }
-                    
-                    if viewModel.showingChart {
-                        Chart(viewModel.chartData) { data in
-                            BarMark(
-                                x: .value("Hour", data.date, unit: data.unit),
-                                y: .value("Amount", data.amount)
-                            )
-                        }
-                        .foregroundStyle(viewModel.appTint)
-                        .chartYAxisLabel { chartYAxisLabel }
-                        .frame(height: 150)
-                    }
-                    
-                    List(viewModel.days) { day in
-                        Section {
-                            ForEach(day.tips.sorted { $0.createdAt! < $1.createdAt! }) { tip in
-                                VStack(alignment: .leading) {
-                                    Text(NumberFormatter.currencyString(from: tip.amount) ?? "")
-                                    Text(tip.createdAt?.formatted(date: .omitted, time: .shortened) ?? "")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                }
-                                .swipeActions(edge: .trailing, allowsFullSwipe: true, content: {
-                                    Button {
-                                        viewModel.delete(tip)
-                                    } label: {
-                                        Image(systemName: "trash")
-                                    }
-                                    .tint(Color.red)
-                                })
+            if !viewModel.searchText.isEmpty {
+                listView
+            } else {
+                ZStack(alignment: .bottomTrailing) {
+                    VStack(spacing: 16) {
+                        Picker("", selection: $viewModel.pickerSelection) {
+                            ForEach(PickerValues.allCases, id: \.self) { value in
+                                Text(value.rawValue)
                             }
-                        } header: {
-                            HStack {
-                                Text(day.date.relativeDateFormatted())
-                                Spacer()
-                                Text(NumberFormatter.currencyString(from: day.tips.total()) ?? "")
-                                    .font(Font.body.bold())
-                                Spacer()
-                                Text("\(day.tips.count) tips")
+                        }
+                        .pickerStyle(.segmented)
+                        .padding(.horizontal)
+                        .onChange(of: viewModel.pickerSelection) { _ in viewModel.fetchData() }
+                        
+                        datePicker
+                            .onChange(of: viewModel.selectedDate) { _ in viewModel.fetchData() }
+                            .padding(.horizontal)
+                        
+                        if viewModel.showingChart {
+                            Chart(viewModel.chartData) { data in
+                                BarMark(
+                                    x: .value("Hour", data.date, unit: data.unit),
+                                    y: .value("Amount", data.amount)
+                                )
                             }
-                            .frame(maxWidth: .infinity)
+                            .foregroundStyle(viewModel.appTint)
+                            .chartYAxisLabel { chartYAxisLabel }
+                            .frame(height: 150)
+                            .padding(.horizontal)
+                        }
+                        
+                        listView
+                    }
+                    .navigationTitle(NumberFormatter.currencyString(from: viewModel.total) ?? "Home")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button {
+                                viewModel.showingSettingsView.toggle()
+                            } label: {
+                                Image(systemName: "gearshape.fill")
+                            }
+                            
                         }
                     }
-                    .safeAreaInset(edge: .bottom, alignment: .trailing) {
-                        Button {
-                            viewModel.showingAddTipView.toggle()
-                        } label: {
-                            Image(systemName: "plus.circle.fill")
-                                .resizable()
-                                .frame(width: 60, height: 60)
-                        }
-                        .padding(.trailing)
-                    }
-                    
-                }
-                .padding(.horizontal)
-                .navigationTitle(NumberFormatter.currencyString(from: viewModel.total) ?? "Home")
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button {
-                            viewModel.showingSettingsView.toggle()
-                        } label: {
-                            Image(systemName: "gearshape.fill")
-                        }
-
+                    .toolbarTitleMenu {
+                        Text("Hi")
+                        Text("Hello")
                     }
                 }
             }
         }
+        .searchable(text: $viewModel.searchText)
+        // Add Tip View
         .sheet(isPresented: $viewModel.showingAddTipView, onDismiss: {
             viewModel.fetchData()
         }, content: {
-            AddTipView(date: $viewModel.selectedDate)
+            AddTipView(date: viewModel.selectedDate)
+                .environmentObject(viewModel.dataManager)
                 .presentationDetents([.medium])
         })
+        // Edit Tip View
+        .sheet(item: $viewModel.tipToEdit, onDismiss: {
+            viewModel.tipToEdit = nil
+            viewModel.fetchData()
+        }, content: { tip in
+            EditTipView(tip: tip)
+                .environmentObject(viewModel.dataManager)
+                .presentationDetents([.medium])
+        })
+        // Settings View
         .sheet(isPresented: $viewModel.showingSettingsView) {
             SettingsView()
                 .presentationDetents([.large, .medium])
@@ -129,6 +93,86 @@ struct MainView: View {
         .tint(viewModel.appTint)
     }
     
+    @ViewBuilder
+    var listView: some View {
+        List(viewModel.searchResults) { day in
+            Section {
+                ForEach(day.tips.sorted { $0.createdAt! < $1.createdAt! }) { tip in
+                    VStack(alignment: .leading) {
+                        Text(NumberFormatter.currencyString(from: tip.amount) ?? "")
+                        HStack(spacing: 0) {
+                            Text(tip.createdAt?.formatted(date: .omitted, time: .shortened) ?? "")
+                            if !tip.comment!.isEmpty {
+                                Text(" • ") + Text(tip.comment!)
+                            }
+                        }
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    }
+                    .swipeActions(edge: .trailing, allowsFullSwipe: true, content: {
+                        Button {
+                            viewModel.delete(tip)
+                        } label: {
+                            Label {
+                                Text("Delete")
+                            } icon: {
+                                Image(systemName: "trash")
+                            }
+                        }
+                        .tint(Color.red)
+                        
+                        Button {
+                            viewModel.tipToEdit = tip
+                        } label: {
+                            Label {
+                                Text("Edit")
+                            } icon: {
+                                Image(systemName: "pencil")
+                            }
+                        }
+                        .tint(Color.orange)
+                    })
+                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                        Button {
+                            viewModel.dataManager.addTip(amount: tip.amount, date: tip.date!) { _ in
+                                viewModel.fetchData()
+                            }
+                        } label: {
+                            Label {
+                                Text("Add")
+                            } icon: {
+                                Image(systemName: "plus")
+                            }
+                        }
+                        .tint(viewModel.appTint)
+                    }
+                }
+            } header: {
+                HStack {
+                    Text(day.date.relativeDateFormatted())
+                    Spacer()
+                    Text(NumberFormatter.currencyString(from: day.tips.total()) ?? "")
+                        .font(Font.body.bold())
+                    Spacer()
+                    Text("\(day.tips.count) tips")
+                }
+                .frame(maxWidth: .infinity)
+            }
+        }
+        
+        .safeAreaInset(edge: .bottom, alignment: .trailing) {
+            Button {
+                viewModel.showingAddTipView.toggle()
+            } label: {
+                Image(systemName: "plus.circle.fill")
+                    .resizable()
+                    .frame(width: 60, height: 60)
+            }
+            .padding(.trailing)
+        }
+    }
+    
+    @ViewBuilder
     var datePicker: some View {
         ZStack {
             HStack {
@@ -170,6 +214,7 @@ struct MainView: View {
                         .datePickerStyle(.compact)
                         .fixedSize()
                         .offset(x: -4)
+//                        .accentColor(viewModel.appTint)
                 } else {
                     Text(datePickerLabel)
                         .font(.body)
@@ -190,12 +235,23 @@ struct MainView: View {
                 } label: {
                     Image(systemName: "chevron.right")
                 }
-                
             }
             .frame(maxWidth: .infinity)
         }
         .font(.title2)
         .fontWeight(.semibold)
+    }
+    
+    @ViewBuilder
+    var chartYAxisLabel: some View {
+        switch viewModel.pickerSelection {
+        case .day:
+            Text("\(Locale.current.currencySymbol ?? "$") / Hour")
+        case .week, .month:
+            Text("\(Locale.current.currencySymbol ?? "$") / Day")
+        case .year:
+            Text("\(Locale.current.currencySymbol ?? "$") / month")
+        }
     }
     
     var datePickerLabel: String {
@@ -220,23 +276,13 @@ struct MainView: View {
             return formatter.string(from: viewModel.selectedDate)
         }
     }
-    
-    var chartYAxisLabel: some View {
-        switch viewModel.pickerSelection {
-        case .day:
-            return Text("\(Locale.current.currencySymbol ?? "$") / Hour")
-        case .week, .month:
-            return Text("\(Locale.current.currencySymbol ?? "$") / Day")
-        case .year:
-            return Text("\(Locale.current.currencySymbol ?? "$") / month")
-        }
-    }
 }
 
 extension MainView {
     class ViewModel: ObservableObject {
-        @Published var pickerSelection: PickerValue = .day
         @Published var selectedDate: Date
+        
+        @Published var searchText = ""
         
         @Published var days = [Day]()
         @Published var total: Double = 0
@@ -246,6 +292,9 @@ extension MainView {
         @Published var showingAddTipView = false
         @Published var showingSettingsView = false
         
+        @Published var tipToEdit: Tip?
+        
+        @AppStorage("pickerSelection") var pickerSelection: PickerValues = .day
         @AppStorage("showingChart") var showingChart = true
         @AppStorage("appTint", store: .init(suiteName: "group.com.fromderik.Gratuity")) var appTint: Color = .blue
         
@@ -254,6 +303,25 @@ extension MainView {
 #else
         let dataManager = DataManager.main
 #endif
+        
+        var searchResults: [Day] {
+            if searchText.isEmpty {
+                return days
+            } else {
+                var searchDays = [Day]()
+                do {
+                    try dataManager.fetchTips(filter: searchText) { tips in
+                        searchDays = tips
+                            .group { $0.date! }
+                            .compactMap { Day(tips: $0.value, date: $0.key) }
+                            .sorted { $0.date < $1.date }
+                    }
+                } catch {
+                    print(error)
+                }
+                return searchDays
+            }
+        }
         
         init() {
             let components = Calendar.current.dateComponents([.year, .month, .day], from: .now)
@@ -271,7 +339,6 @@ extension MainView {
                 fetchMonthlyData()
             case .year:
                 fetchYearlyData()
-                break
             }
         }
         
@@ -399,26 +466,12 @@ extension MainView {
                 print(error)
             }
         }
+        
     }
-}
-
-struct ChartData: Identifiable, Hashable {
-    var id = UUID()
-    var date: Date
-    var amount: Double
-    var unit: Calendar.Component
-}
-
-enum PickerValue: String, Hashable, CaseIterable {
-    case day = "Day"
-    case week = "Week"
-    case month = "Month"
-    case year = "Year"
 }
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
         MainView()
-            .previewDevice(.init(rawValue: "iPhone 13 Pro"))
     }
 }

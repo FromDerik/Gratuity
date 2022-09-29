@@ -61,14 +61,18 @@ struct TodaysTotalEntryView : View {
 
     var body: some View {
         ZStack {
-            ContainerRelativeShape()
-                .fill(appTint.gradient)
+            if widgetFamily != .accessoryRectangular {
+                ContainerRelativeShape()
+                    .fill(appTint.gradient)
+            }
             
             switch widgetFamily {
             case .systemSmall:
                 smallWidget
             case .systemMedium:
                 mediumWidget
+            case .accessoryRectangular:
+                EmptyView()
             default:
                 EmptyView()
             }
